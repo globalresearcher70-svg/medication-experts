@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#1a5c38">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Medication Experts">
+<title>The Medication Experts</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --green-dark: #1a5c38;
+  --green-mid: #2d8653;
+  --green-light: #4CAF50;
+  --blue-dark: #1a3a5c;
+  --blue-mid: #1565C0;
+  --blue-light: #e8f4fd;
+  --gold: #f0a500;
+  --red: #c62828;
+  --off-white: #f7faf8;
+  --text-dark: #1a2e1e;
+  --text-mid: #3d5c45;
+  --shadow: 0 4px 24px rgba(26,92,56,0.13);
+  --radius: 18px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Nunito',sans-serif;background:var(--off-white);color:var(--text-dark);min-height:100vh;}
+
+.hero{background:linear-gradient(145deg,var(--green-dark) 0%,var(--blue-dark) 100%);color:white;padding:36px 20px 32px;text-align:center;position:relative;overflow:hidden;}
+.logo-icon{width:72px;height:72px;background:white;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;box-shadow:0 4px 20px rgba(0,0,0,0.25);}
+.brand-name{font-family:'Playfair Display',serif;font-size:26px;font-weight:900;line-height:1.2;margin-bottom:6px;}
+.brand-name span{color:var(--gold);}
+.tagline-en{font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,0.85);margin-bottom:3px;}
+.tagline-ha{font-size:11px;color:rgba(255,255,255,0.6);font-style:italic;margin-bottom:16px;}
+.badge-row{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;}
+.badge{background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.2);color:white;padding:5px 12px;border-radius:20px;font-size:11px;font-weight:700;}
+
+.delivery-visual{background:linear-gradient(135deg,#e8f5e9,#e3f2fd);margin:0 16px;border-radius:var(--radius);padding:16px;text-align:center;box-shadow:var(--shadow);margin-top:-18px;position:relative;z-index:2;}
+.delivery-icons{font-size:28px;margin-bottom:6px;letter-spacing:6px;}
+.delivery-text{font-size:13px;font-weight:800;color:var(--green-dark);}
+.delivery-text .ha{display:block;font-size:12px;color:var(--blue-mid);font-style:italic;font-weight:700;margin-top:2px;}
+
+.promise-strip{background:white;margin:12px 16px 0;border-radius:var(--radius);padding:18px 16px;box-shadow:var(--shadow);}
+.promise-strip h2{font-size:16px;font-weight:800;color:var(--green-dark);margin-bottom:2px;}
+.promise-strip h2 small{display:block;font-size:12px;color:var(--blue-mid);font-weight:700;font-style:italic;margin-top:2px;}
+.promise-items{display:flex;gap:8px;margin-top:12px;}
+.promise-item{flex:1;background:var(--off-white);border-radius:10px;padding:10px 6px;text-align:center;}
+.promise-item .icon{font-size:20px;margin-bottom:4px;}
+.promise-item .en{font-size:10px;font-weight:800;color:var(--green-dark);}
+.promise-item .ha{font-size:9px;color:#888;font-style:italic;margin-top:1px;}
+
+.section{padding:18px 16px 0;}
+.section-title{font-size:15px;font-weight:800;color:var(--green-dark);margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+.section-title::after{content:'';flex:1;height:2px;background:linear-gradient(to right,var(--green-light),transparent);border-radius:2px;}
+
+.form-card{background:white;border-radius:var(--radius);padding:18px;box-shadow:var(--shadow);margin-bottom:12px;}
+.form-card h3{font-size:13px;font-weight:800;color:var(--blue-dark);margin-bottom:14px;padding-bottom:8px;border-bottom:2px solid var(--blue-light);}
+
+.field{margin-bottom:13px;}
+.field label{display:block;font-size:11px;font-weight:800;color:var(--text-dark);margin-bottom:4px;text-transform:uppercase;letter-spacing:0.5px;}
+.field label .ha{font-size:11px;color:var(--green-mid);text-transform:none;letter-spacing:0;font-weight:700;font-style:italic;}
+.field input,.field select,.field textarea{width:100%;padding:11px 14px;border:2px solid #e0ece5;border-radius:10px;font-family:'Nunito',sans-serif;font-size:14px;color:var(--text-dark);background:var(--off-white);transition:border-color 0.2s;outline:none;}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--green-mid);box-shadow:0 0 0 3px rgba(45,134,83,0.1);background:white;}
+.field input::placeholder,.field textarea::placeholder{color:#aaa;font-size:13px;}
+.field textarea{resize:vertical;min-height:60px;}
+.hint{font-size:11px;color:#888;margin-top:3px;font-style:italic;}
+
+.location-toggle{display:flex;gap:8px;margin-bottom:10px;}
+.loc-btn{flex:1;padding:11px 8px;border:2px solid #e0ece5;border-radius:10px;background:var(--off-white);font-family:'Nunito',sans-serif;font-size:12px;font-weight:800;cursor:pointer;text-align:center;transition:all 0.2s;color:var(--text-dark);}
+.loc-btn.active{border-color:var(--green-mid);background:var(--green-mid);color:white;}
+.outside-note{background:#fff8e1;border:2px solid var(--gold);border-radius:10px;padding:12px 14px;font-size:12px;color:#5d4037;line-height:1.6;display:none;margin-bottom:10px;}
+.outside-note.show{display:block;}
+
+.medicine-block{background:#f0f7f3;border:2px solid #c8e6c9;border-radius:14px;padding:14px;margin-bottom:12px;}
+.med-num{font-size:11px;font-weight:800;color:var(--green-dark);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;}
+.remove-btn{background:#ffebee;color:var(--red);border:none;border-radius:8px;padding:4px 10px;font-size:11px;font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif;}
+
+.prescription-block{background:#e8f4fd;border:2px solid #bbdefb;border-radius:14px;padding:14px;margin-bottom:12px;}
+.presc-num{font-size:11px;font-weight:800;color:var(--blue-dark);margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;}
+
+.upload-row{display:flex;gap:8px;margin-bottom:8px;}
+.cam-btn{flex:1;padding:12px 8px;background:var(--blue-mid);color:white;border:none;border-radius:10px;font-family:'Nunito',sans-serif;font-size:12px;font-weight:800;cursor:pointer;text-align:center;line-height:1.4;}
+.gal-btn{flex:1;padding:12px 8px;background:white;color:var(--blue-dark);border:2px solid var(--blue-mid);border-radius:10px;font-family:'Nunito',sans-serif;font-size:12px;font-weight:800;cursor:pointer;text-align:center;line-height:1.4;}
+.preview-img{width:100%;max-height:160px;object-fit:cover;border-radius:8px;margin-top:8px;display:none;}
+.download-link{display:none;margin-top:6px;font-size:11px;background:#e8f5e9;border:1px solid #c8e6c9;border-radius:8px;padding:8px 10px;color:var(--green-dark);font-weight:800;text-align:center;}
+.download-link.show{display:block;}
+.for-input{width:100%;padding:9px 12px;border:2px solid #bbdefb;border-radius:8px;font-family:'Nunito',sans-serif;font-size:13px;background:white;outline:none;margin-top:8px;}
+
+.add-btn{width:100%;padding:12px;background:white;color:var(--green-dark);border:2px dashed var(--green-mid);border-radius:12px;font-family:'Nunito',sans-serif;font-size:13px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:12px;}
+
+.guide-note{background:linear-gradient(135deg,#e8f5e9,#e3f2fd);border-left:4px solid var(--green-light);border-radius:10px;padding:12px 14px;margin:10px 0;font-size:12px;color:var(--text-mid);line-height:1.6;}
+.guide-note strong{color:var(--green-dark);display:block;margin-bottom:2px;}
+
+/* VOICE RECORDER */
+.voice-card{background:linear-gradient(135deg,#fce4ec,#f3e5f5);border:2px solid #f48fb1;border-radius:14px;padding:16px;margin-bottom:12px;}
+.voice-card h4{font-size:13px;font-weight:800;color:#880e4f;margin-bottom:4px;}
+.voice-card p{font-size:11px;color:#ad1457;margin-bottom:12px;line-height:1.5;font-style:italic;}
+.record-btn{width:100%;padding:14px;border:none;border-radius:12px;font-family:'Nunito',sans-serif;font-size:14px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:all 0.2s;}
+.record-btn.idle{background:#e91e63;color:white;}
+.record-btn.recording{background:#b71c1c;color:white;animation:pulse 1s infinite;}
+.record-btn.done{background:#2e7d32;color:white;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.7;}}
+.record-timer{text-align:center;font-size:22px;font-weight:800;color:#880e4f;margin:10px 0;display:none;}
+.voice-playback{width:100%;margin-top:10px;display:none;border-radius:8px;}
+.voice-download{display:none;margin-top:8px;font-size:11px;background:#fce4ec;border:1px solid #f48fb1;border-radius:8px;padding:8px 10px;color:#880e4f;font-weight:800;text-align:center;}
+.voice-download.show{display:block;}
+
+/* REFERRER */
+.referrer-card{background:white;border-radius:var(--radius);padding:18px;box-shadow:var(--shadow);margin-bottom:12px;border-top:4px solid var(--blue-mid);}
+.referrer-card h3{font-size:13px;font-weight:800;color:var(--blue-dark);margin-bottom:8px;padding-bottom:8px;border-bottom:2px solid var(--blue-light);}
+
+/* PAYMENT SECTION */
+.fee-section{margin:0 16px 12px;background:linear-gradient(135deg,#e8f5e9,#e3f2fd);border:2px solid var(--green-light);border-radius:var(--radius);padding:18px;}
+.fee-section h3{font-size:13px;font-weight:800;color:var(--green-dark);margin-bottom:10px;}
+.payment-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;padding:8px 0;border-bottom:1px solid rgba(0,0,0,0.06);}
+.payment-row:last-of-type{border-bottom:none;}
+.payment-label{font-size:11px;color:#888;font-weight:700;}
+.payment-value{font-size:13px;font-weight:800;color:var(--blue-dark);}
+.payment-note{font-size:11px;color:#555;margin-top:10px;font-style:italic;line-height:1.6;background:white;border-radius:10px;padding:10px 12px;}
+
+/* PROOF UPLOAD */
+.proof-section{margin-top:14px;background:white;border-radius:12px;padding:14px;border:2px solid #c8e6c9;}
+.proof-section h4{font-size:12px;font-weight:800;color:var(--green-dark);margin-bottom:10px;}
+.proof-preview{width:100%;max-height:140px;object-fit:cover;border-radius:8px;margin-top:8px;display:none;}
+
+.btn-submit{width:100%;padding:18px;background:linear-gradient(135deg,var(--green-dark),var(--green-mid));color:white;border:none;border-radius:14px;font-family:'Nunito',sans-serif;font-size:16px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 6px 20px rgba(26,92,56,0.35);margin-top:6px;}
+
+.disclaimer{margin:0 16px 20px;background:var(--green-dark);color:rgba(255,255,255,0.75);border-radius:var(--radius);padding:16px;font-size:11px;text-align:center;line-height:1.8;}
+.disclaimer strong{color:white;display:block;font-size:13px;margin-bottom:4px;}
+
+.contact-bar{margin:0 16px 16px;background:white;border-radius:var(--radius);padding:14px 16px;box-shadow:var(--shadow);display:flex;align-items:center;gap:12px;}
+.wa-icon{width:44px;height:44px;background:#25D366;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.wa-icon svg{width:26px;height:26px;fill:white;}
+.contact-text{flex:1;}
+.contact-text strong{display:block;font-size:15px;color:var(--green-dark);font-weight:800;}
+.contact-text span{font-size:11px;color:#888;}
+.call-btn{background:var(--green-dark);color:white;border:none;border-radius:10px;padding:8px 12px;font-family:'Nunito',sans-serif;font-size:11px;font-weight:800;cursor:pointer;text-decoration:none;display:inline-block;}
+
+.success-screen{display:none;position:fixed;inset:0;background:linear-gradient(145deg,var(--green-dark),var(--blue-dark));z-index:100;align-items:center;justify-content:center;padding:30px;text-align:center;overflow-y:auto;}
+.success-screen.show{display:flex;flex-direction:column;}
+.success-icon{width:80px;height:80px;background:white;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-size:36px;}
+.success-screen h2{color:white;font-family:'Playfair Display',serif;font-size:24px;margin-bottom:10px;}
+.success-screen p{color:rgba(255,255,255,0.85);font-size:13px;line-height:1.8;margin-bottom:8px;}
+.success-pay{background:rgba(255,255,255,0.12);border-radius:12px;padding:14px;margin:12px 0;}
+.success-pay .bank-info{color:white;font-size:15px;font-weight:800;margin-top:6px;}
+.success-pay .bank-name{color:rgba(255,255,255,0.7);font-size:13px;}
+.btn-back{margin-top:20px;padding:14px 32px;background:white;color:var(--green-dark);border:none;border-radius:12px;font-family:'Nunito',sans-serif;font-size:15px;font-weight:800;cursor:pointer;}
+
+.install-banner{display:none;background:var(--gold);color:var(--text-dark);padding:12px 16px;font-size:13px;font-weight:700;align-items:center;justify-content:space-between;gap:10px;}
+.install-banner.show{display:flex;}
+.install-btn{background:var(--green-dark);color:white;border:none;border-radius:8px;padding:6px 14px;font-family:'Nunito',sans-serif;font-weight:800;font-size:12px;cursor:pointer;}
+</style>
+</head>
+<body>
+
+<div class="install-banner" id="installBanner">
+  <span>📲 Add app to your phone!</span>
+  <button class="install-btn" id="installBtn">Install</button>
+</div>
+
+<div class="hero">
+  <div class="logo-icon">
+    <svg viewBox="0 0 42 42" fill="none">
+      <rect x="4" y="14" width="22" height="18" rx="4" fill="#1a5c38"/>
+      <rect x="8" y="10" width="14" height="6" rx="2" fill="#2d8653"/>
+      <rect x="13" y="18" width="2" height="10" rx="1" fill="white"/>
+      <rect x="9" y="22" width="10" height="2" rx="1" fill="white"/>
+      <circle cx="32" cy="30" r="8" fill="#1565C0" opacity="0.15" stroke="#1565C0" stroke-width="2"/>
+      <circle cx="32" cy="30" r="3" fill="#1565C0"/>
+      <line x1="38" y1="36" x2="42" y2="40" stroke="#1565C0" stroke-width="2.5" stroke-linecap="round"/>
+    </svg>
+  </div>
+  <div class="brand-name">The <span>Medication</span> Experts</div>
+  <div class="tagline-en">We Find · We Verify · We Deliver</div>
+  <div class="tagline-ha">Za mu Samo muku · Za mu Tabbatar · Mu Kawo muku</div>
+  <div class="badge-row">
+    <span class="badge">🏥 Kano State</span>
+    <span class="badge">✅ Verified Medicines</span>
+  </div>
+</div>
+
+<div class="delivery-visual">
+  <div class="delivery-icons">🏍️ 🚗</div>
+  <div class="delivery-text">
+    We deliver to your doorstep!
+    <span class="ha">Zamu kawo muku maganin da kuke buƙata har gida</span>
+  </div>
+</div>
+
+<div class="promise-strip">
+  <h2>Do you need medicine? <small>Kuna buƙatar Magani?</small></h2>
+  <div class="promise-items">
+    <div class="promise-item"><div class="icon">🔍</div><div class="en">We Find It</div><div class="ha">Za mu Samo muku</div></div>
+    <div class="promise-item"><div class="icon">✅</div><div class="en">We Verify It</div><div class="ha">Za mu Tabbatar</div></div>
+    <div class="promise-item"><div class="icon">🚚</div><div class="en">We Deliver It</div><div class="ha">Mu Kawo muku</div></div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">Place Your Order / Tura Oda</div>
+  <form id="orderForm">
+
+    <!-- PERSONAL INFO -->
+    <div class="form-card">
+      <h3>👤 Your Information | Bayananku</h3>
+      <div class="guide-note">
+        <strong>⚠️ Muhimmin bayani:</strong>
+        Idan baku san wasu bayanan ba, ku rubuta mana abun da kuka sani kawai. Za mu tabbatar da komai.<br>
+        <span style="font-size:11px;color:#555;">Fill only what you know. Even one field is enough to send.</span>
+      </div>
+      <div class="field">
+        <label>Full Name — <span class="ha">Sunanku cikakke</span></label>
+        <input type="text" id="name" placeholder="e.g. Aminu Musa">
+      </div>
+      <div class="field">
+        <label>Phone Number — <span class="ha">Lambar Wayarku</span></label>
+        <input type="tel" id="phone" placeholder="e.g. 08012345678">
+      </div>
+      <div class="field">
+        <label>Age — <span class="ha">Shekaru</span></label>
+        <input type="number" id="age" placeholder="e.g. 35" min="1" max="120">
+      </div>
+      <div class="field">
+        <label>Delivery Location — <span class="ha">Wurin Kaiwa</span></label>
+        <div class="location-toggle">
+          <button type="button" class="loc-btn active" id="btnKano" onclick="setLocation('kano')">📍 Within Kano City</button>
+          <button type="button" class="loc-btn" id="btnOutside" onclick="setLocation('outside')">🗺️ Outside Kano</button>
+        </div>
+        <div class="outside-note" id="outsideNote">
+          <strong>Outside Kano / Wajen Kano:</strong><br>
+          Submit your order. We will contact you to discuss delivery.<br>
+          <em>Za mu tuntube ku domin tattauna kuɗin kaiwa.</em>
+        </div>
+        <input type="text" id="address" placeholder="e.g. Farawa, near JAMB Office, Kano">
+        <div class="hint">Also send your live location on WhatsApp — Aiko mana da wurin da kuke Yanzu ta WhatsApp</div>
+      </div>
+    </div>
+
+    <!-- MEDICINES -->
+    <div class="form-card">
+      <h3>💊 Medicine(s) Needed | Maganin da ake buƙata</h3>
+      <div id="medicinesList"></div>
+      <button type="button" class="add-btn" onclick="addMedicine()">
+        ➕ Add Another Medicine — <em style="font-weight:600;">Ƙara wani maganin</em>
+      </button>
+    </div>
+
+    <!-- PRESCRIPTIONS -->
+    <div class="form-card">
+      <h3>📷 Prescriptions (Optional) | Takardar Maganin Likita (Idan Akwai)</h3>
+      <p style="font-size:12px;color:#888;margin-bottom:12px;line-height:1.6;">
+        Take a photo of your prescription. It will be saved to your phone and sent with your order.<br>
+        <em style="color:var(--green-mid);">Ɗauki hoto na takardar magani. Za a adana shi a wayarku kuma a aika tare da odanku.</em>
+      </p>
+      <div id="prescriptionsList"></div>
+      <button type="button" class="add-btn" onclick="addPrescription()">
+        ➕ Add Another Prescription — <em style="font-weight:600;">Ƙara wani hoton takardar magani</em>
+      </button>
+    </div>
+
+    <!-- VOICE NOTE -->
+    <div class="voice-card">
+      <h4>🎤 Send a Voice Note / Aika Saƙon Murya</h4>
+      <p>
+        Anyone can send a voice note — it is faster and easier!<br>
+        <em>Kowa zai iya aika saƙon murya — ya fi sauƙi kuma ya fi sauri!</em><br><br>
+        <strong style="color:#880e4f;">📢 Especially helpful if you cannot read or write:</strong><br>
+        <em>Musamman idan ba ku iya karatu ko rubutu — kawai ku yi magana, mu ji.</em><br>
+        Just press record and tell us the medicine name, your location, and your phone number.
+      </p>
+      <button type="button" class="record-btn idle" id="recordBtn" onclick="toggleRecording()">
+        🎤 <span id="recordBtnText">Press to Record / Danna don Yin Rikodin</span>
+      </button>
+      <div class="record-timer" id="recordTimer">00:00</div>
+      <audio class="voice-playback" id="voicePlayback" controls></audio>
+      <div class="voice-download" id="voiceDownload">
+        ✅ Voice saved! It will open in WhatsApp after you submit.<br>
+        <em>Muryar an adana! Za ta bude a WhatsApp bayan ka aika oda.</em>
+      </div>
+    </div>
+
+    <!-- HEALTH WORKER / REFERRER -->
+    <div class="referrer-card">
+      <h3>🩺 Health Worker / Referrer Details (Optional — English Only)</h3>
+      <p style="font-size:12px;color:#888;margin-bottom:14px;line-height:1.6;">
+        For doctors, nurses, pharmacists, pharmacy technicians, chemists, and any health worker referring a patient. Leave blank if not applicable.
+      </p>
+      <div class="field">
+        <label>Your Full Name</label>
+        <input type="text" id="refName" placeholder="e.g. Dr. Musa Abdullahi">
+      </div>
+      <div class="field">
+        <label>Profession / Title</label>
+        <select id="refTitle">
+          <option value="">Select your role</option>
+          <option>Doctor (MD)</option>
+          <option>Nurse</option>
+          <option>Pharmacist</option>
+          <option>Pharmacy Technician</option>
+          <option>Chemist / PMDC</option>
+          <option>Midwife</option>
+          <option>Community Health Worker (CHW)</option>
+          <option>Referrer / Agent</option>
+          <option>Other Health Worker</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Phone Number</label>
+        <input type="tel" id="refPhone" placeholder="e.g. 08012345678">
+      </div>
+      <div class="field">
+        <label>Place of Work / Hospital / Clinic</label>
+        <input type="text" id="refWorkplace" placeholder="e.g. Murtala Muhammad Specialist Hospital, Kano">
+      </div>
+      <div class="field">
+        <label>Address of Workplace</label>
+        <input type="text" id="refAddress" placeholder="e.g. Kano Road, Kano">
+      </div>
+      <div class="field">
+        <label>Patient Name (if filling on behalf of patient)</label>
+        <input type="text" id="refPatient" placeholder="e.g. Fatima Usman">
+      </div>
+      <div class="guide-note" style="background:#e3f2fd;border-left-color:var(--blue-mid);">
+        <strong style="color:var(--blue-dark);">Note for Controlled Drugs:</strong>
+        For controlled or prescription-only medicines, your phone number and workplace will be verified before the order is processed.
+      </div>
+    </div>
+
+    <!-- EXTRA MESSAGE -->
+    <div class="form-card">
+      <h3>💬 Additional Message | Idan Akwai wasu bayanai</h3>
+      <div class="field">
+        <textarea id="extraMessage" placeholder="Idan Akwai wasu bayanai, ko ƙarin bayani za ku iya yi mana a game da odarku / Any extra information..."></textarea>
+      </div>
+    </div>
+
+    <!-- SUBMIT -->
+    <button type="button" onclick="submitOrder()" class="btn-submit">
+      <span>📱</span>
+      <div>Send Order via WhatsApp<br><span style="font-size:12px;opacity:0.85;font-weight:600;">Tura Oda ta WhatsApp</span></div>
+    </button>
+
+  </form>
+</div>
+
+<!-- CONTACT -->
+<div class="section" style="margin-bottom:12px;">
+  <div class="section-title">Contact Us / Tuntuɓe mu</div>
+</div>
+<div class="contact-bar">
+  <div class="wa-icon">
+    <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+  </div>
+  <div class="contact-text">
+    <strong>07034783425</strong>
+    <span>Ku kira mu ko kuyi mana magana a Whatsapp a koda yaushe</span>
+  </div>
+  <a href="tel:07034783425" class="call-btn">📞 Call</a>
+</div>
+
+<!-- PAYMENT SECTION -->
+<div class="fee-section">
+  <h3>💳 Payment Details / Yadda Za a Biya</h3>
+  <p style="font-size:12px;color:var(--text-mid);margin-bottom:12px;line-height:1.6;">
+    After you submit your order, we will contact you to confirm and discuss the delivery fee based on your location.<br>
+    <em style="color:var(--green-mid);font-size:11px;">Bayan kun aika oda, za mu tuntube ku don tabbatarwa da tattauna kuɗin kaiwa bisa wurin da kuke.</em>
+  </p>
+  <div class="payment-row"><span class="payment-label">Bank / Wallet:</span><span class="payment-value">Opay</span></div>
+  <div class="payment-row"><span class="payment-label">Account Number:</span><span class="payment-value">7034783425</span></div>
+  <div class="payment-row"><span class="payment-label">Account Name:</span><span class="payment-value">Mas'ud Ibrahim Garba</span></div>
+  <div class="payment-note">
+    After payment, upload proof below or send screenshot on WhatsApp: 07034783425<br>
+    <span style="color:var(--green-mid);">Da zarar kun biya, ku tura shaidar biya a ƙasa ko ta WhatsApp.</span>
+  </div>
+  <div class="proof-section">
+    <h4>📤 Upload Proof of Payment / Shaidar Biya (Optional)</h4>
+    <div class="upload-row">
+      <button type="button" class="cam-btn" onclick="triggerProof(true)">📷 Take Photo</button>
+      <button type="button" class="gal-btn" onclick="triggerProof(false)">🖼️ From Gallery<br><small>Dubo daga cikin gallery</small></button>
+    </div>
+    <input type="file" id="proofInput" accept="image/*" style="display:none" onchange="handleProof(this)">
+    <img id="proofPreview" class="proof-preview" alt="Proof of payment">
+    <div style="margin-top:10px;"><label style="display:block;font-size:11px;font-weight:800;color:#1a5c38;margin-bottom:4px;text-transform:uppercase;letter-spacing:0.5px;">Amount Paid (Optional) u2014 <span style="text-transform:none;font-style:italic;color:#2d8653;">Adadin da aka Biya</span></label><input type="text" id="proofAmount" placeholder="e.g. u20a62,000 u2014 Naira 2,000" style="width:100%;padding:11px 14px;border:2px solid #c8e6c9;border-radius:10px;font-family:Nunito,sans-serif;font-size:14px;background:#f7faf8;outline:none;"><div style="font-size:11px;color:#888;margin-top:3px;font-style:italic;">Write the amount you sent if you prefer / Ku rubuta adadin kuɗin da kuka aika idan kuna so</div></div>
+  </div>
+</div>
+
+<!-- DISCLAIMER -->
+<div class="disclaimer">
+  <strong>⚠️ Important Notice</strong>
+  Bama harka da miyagun ƙwayoyi, halattatun Magunguna kawai mu ke kawo wa.<br>
+  We do NOT support illegal drugs. Legal and approved medicines only.<br>
+  Your health and safety are our priority.
+</div>
+
+<!-- SUCCESS -->
+<div class="success-screen" id="successScreen">
+  <div class="success-icon">✅</div>
+  <h2>Order Sent!</h2>
+  <p><strong>Muna godiya. Mun karɓi odarku.</strong><br>Za mu tuntube ku nan ba da jimawa ba.<br>Allah ya ba da lafiya.</p>
+  <div class="success-pay">
+    <div style="font-size:12px;color:rgba(255,255,255,0.75);margin-bottom:6px;">We will contact you to confirm and discuss delivery.<br><em>Za mu tuntube ku don tabbatarwa da tattauna kuɗin kaiwa.</em></div>
+    <div class="bank-info">Mas'ud Ibrahim Garba</div>
+    <div class="bank-name">Opay — 7034783425</div>
+  </div>
+  <div id="prescReminder" style="display:none;background:rgba(255,255,255,0.13);border:2px solid rgba(255,255,255,0.25);border-radius:14px;padding:16px;margin:10px 0;text-align:left;">
+    <div style="font-size:13px;font-weight:800;color:white;margin-bottom:10px;text-align:center;">📎 NEXT STEP — Send Your Images / Mataki na Gaba</div>
+    <div style="font-size:12px;color:rgba(255,255,255,0.9);line-height:1.9;">
+      Your prescription / proof photos are saved on your phone.<br>
+      <em style="color:rgba(255,255,255,0.65);">Hoton takardar magani / shaidar biya an adana a wayarku.</em>
+    </div>
+    <div style="margin-top:10px;font-size:12px;color:white;line-height:2.1;">
+      <strong>How to send them:</strong><br>
+      1️⃣ Press the green button below to open WhatsApp<br>
+      2️⃣ Tap the 📎 attach icon in the chat<br>
+      3️⃣ Choose Gallery or Camera<br>
+      4️⃣ Select your saved prescription or payment photo<br>
+      5️⃣ Press Send ✅
+    </div>
+    <div style="margin-top:8px;font-size:11px;color:rgba(255,255,255,0.65);line-height:1.9;font-style:italic;">
+      Yadda za a aika hoto:<br>
+      1️⃣ Danna maballin kore da ke ƙasa don bude WhatsApp<br>
+      2️⃣ Danna alamar 📎 a cikin zana<br>
+      3️⃣ Zaɓi Gallery ko Camera<br>
+      4️⃣ Zaɓi hoton da aka adana<br>
+      5️⃣ Danna Aika ✅
+    </div>
+    <button onclick="openWhatsAppForImages()" style="width:100%;margin-top:14px;padding:14px;background:#25D366;color:white;border:none;border-radius:12px;font-family:Nunito,sans-serif;font-size:14px;font-weight:800;cursor:pointer;">
+      📱 Open WhatsApp to Send Images / Bude WhatsApp don Aika Hoto
+    </button>
+  </div>
+  <button class="btn-back" onclick="resetForm()">← New Order / Sabuwar Oda</button>
+</div>
+
+<script>
+let medicineCount = 0;
+let prescriptionCount = 0;
+let locationChoice = 'kano';
+let prescriptionData = {};
+let proofImageData = null;
+let mediaRecorder = null;
+let audioChunks = [];
+let recordingInterval = null;
+let recordingSeconds = 0;
+let audioBlob = null;
+let isRecording = false;
+
+window.onload = function() { addMedicine(); addPrescription(); };
+
+function setLocation(type) {
+  locationChoice = type;
+  document.getElementById('btnKano').classList.toggle('active', type==='kano');
+  document.getElementById('btnOutside').classList.toggle('active', type==='outside');
+  document.getElementById('outsideNote').classList.toggle('show', type==='outside');
+}
+
+function addMedicine() {
+  medicineCount++;
+  const n = medicineCount;
+  const div = document.createElement('div');
+  div.className = 'medicine-block';
+  div.id = 'med_' + n;
+  div.innerHTML = `
+    <div class="med-num">
+      💊 Medicine ${n} / Magani na ${n}
+      ${n > 1 ? `<button type="button" class="remove-btn" onclick="document.getElementById('med_${n}').remove()">✕ Remove</button>` : ''}
+    </div>
+    <div class="field">
+      <label>Medicine Name — <span class="ha">Sunan Magani</span></label>
+      <input type="text" id="medName${n}" placeholder="e.g. Paracetamol, Amoxicillin">
+    </div>
+    <div class="field">
+      <label>Dosage Form — <span class="ha">Nau'in Magani</span></label>
+      <select id="medForm${n}">
+        <option value="">Select / Zaɓa (Tablet, Syrup, etc.)</option>
+        <option>Tablet</option><option>Syrup</option><option>Capsule</option>
+        <option>Injection</option><option>Cream / Ointment</option>
+        <option>Drops (Eye / Ear / Nose)</option><option>Inhaler</option>
+        <option>Suppository</option><option>Other / Wanin Haka</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>Strength — <span class="ha">Ƙarfin Maganin</span></label>
+      <input type="text" id="medStrength${n}" placeholder="e.g. 500mg, 250mg">
+    </div>
+    <div class="field">
+      <label>Quantity — <span class="ha">Adadin da ake buƙata</span></label>
+      <input type="text" id="medQty${n}" placeholder="e.g. 1 pack, 2 cards / Kati 2, Kwalba 1">
+    </div>
+    <div class="field">
+      <label>This medicine is for — <span class="ha">Wannan Maganin na waye?</span></label>
+      <input type="text" id="medFor${n}" placeholder="e.g. Myself / My child age 5 / My wife — Kaina, Ɗana, Matata">
+    </div>
+  `;
+  document.getElementById('medicinesList').appendChild(div);
+}
+
+function addPrescription() {
+  prescriptionCount++;
+  const n = prescriptionCount;
+  prescriptionData[n] = null;
+  const div = document.createElement('div');
+  div.className = 'prescription-block';
+  div.id = 'presc_' + n;
+  div.innerHTML = `
+    <div class="presc-num">
+      📋 Prescription ${n} / Takardar Magani ta ${n}
+      ${n > 1 ? `<button type="button" class="remove-btn" onclick="document.getElementById('presc_${n}').remove();delete prescriptionData[${n}]">✕ Remove</button>` : ''}
+    </div>
+    <div class="upload-row">
+      <button type="button" class="cam-btn" onclick="triggerPresc(${n}, true)">📷 Take Photo<br><small style="font-weight:600;">Ɗauki Hoto</small></button>
+      <button type="button" class="gal-btn" onclick="triggerPresc(${n}, false)">🖼️ Gallery<br><small style="font-weight:600;">Dubo daga cikin gallery</small></button>
+    </div>
+    <input type="file" id="fileInput${n}" accept="image/*" capture="environment" style="display:none" onchange="handlePresc(${n},this)">
+    <img id="preview${n}" class="preview-img" alt="Prescription preview">
+    <a id="downloadLink${n}" class="download-link" download="prescription_${n}.jpg">📥 Tap to save & send this image on WhatsApp / Danna don adanawa</a>
+    <input type="text" id="prescNote${n}" class="for-input" placeholder="Na waye wannan? / Who is this for? — e.g. My wife, My child">
+  `;
+  document.getElementById('prescriptionsList').appendChild(div);
+}
+
+function triggerPresc(n, useCamera) {
+  const input = document.getElementById('fileInput' + n);
+  if (useCamera) {
+    input.setAttribute('capture', 'environment');
+  } else {
+    input.removeAttribute('capture');
+  }
+  input.click();
+}
+
+function handlePresc(n, input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    prescriptionData[n] = e.target.result;
+    const img = document.getElementById('preview' + n);
+    img.src = e.target.result;
+    img.style.display = 'block';
+    // Auto-download so image is in phone gallery
+    const link = document.getElementById('downloadLink' + n);
+    link.href = e.target.result;
+    link.classList.add('show');
+    // Trigger auto-download
+    const a = document.createElement('a');
+    a.href = e.target.result;
+    a.download = `prescription_${n}.jpg`;
+    a.click();
+  };
+  reader.readAsDataURL(file);
+}
+
+// VOICE RECORDING
+async function toggleRecording() {
+  if (!isRecording) {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      mediaRecorder = new MediaRecorder(stream);
+      audioChunks = [];
+      mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
+      mediaRecorder.onstop = () => {
+        audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+        const url = URL.createObjectURL(audioBlob);
+        const playback = document.getElementById('voicePlayback');
+        playback.src = url;
+        playback.style.display = 'block';
+        // Auto-download voice note
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'voice_order.webm';
+        a.click();
+        document.getElementById('voiceDownload').classList.add('show');
+        document.getElementById('recordBtn').className = 'record-btn done';
+        document.getElementById('recordBtnText').textContent = '✅ Voice Saved — Record Again / Yi Rikodin Kuma';
+      };
+      mediaRecorder.start();
+      isRecording = true;
+      recordingSeconds = 0;
+      document.getElementById('recordBtn').className = 'record-btn recording';
+      document.getElementById('recordBtnText').textContent = '⏹ Stop Recording / Tsayar da Rikodin';
+      document.getElementById('recordTimer').style.display = 'block';
+      recordingInterval = setInterval(() => {
+        recordingSeconds++;
+        const m = Math.floor(recordingSeconds / 60).toString().padStart(2,'0');
+        const s = (recordingSeconds % 60).toString().padStart(2,'0');
+        document.getElementById('recordTimer').textContent = `${m}:${s}`;
+      }, 1000);
+    } catch (err) {
+      alert('Microphone access denied. Please allow microphone to record.\nAn ƙi baiwa izinin microphone. Ka/ki baiwa izini.');
+    }
+  } else {
+    mediaRecorder.stop();
+    mediaRecorder.stream.getTracks().forEach(t => t.stop());
+    isRecording = false;
+    clearInterval(recordingInterval);
+    document.getElementById('recordTimer').style.display = 'none';
+  }
+}
+
+function triggerProof(useCamera) {
+  const input = document.getElementById('proofInput');
+  if (useCamera) input.setAttribute('capture', 'environment');
+  else input.removeAttribute('capture');
+  input.click();
+}
+
+function handleProof(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    proofImageData = e.target.result;
+    const img = document.getElementById('proofPreview');
+    img.src = e.target.result;
+    img.style.display = 'block';
+  };
+  reader.readAsDataURL(file);
+}
+
+function submitOrder() {
+  const name = document.getElementById('name').value.trim();
+  const phone = document.getElementById('phone').value.trim();
+  const age = document.getElementById('age').value.trim();
+  const address = document.getElementById('address').value.trim();
+  const extra = document.getElementById('extraMessage').value.trim();
+
+  const now = new Date();
+  const dateStr = now.toLocaleDateString('en-NG',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  const timeStr = now.toLocaleTimeString('en-NG',{hour:'2-digit',minute:'2-digit'});
+
+  let msg = `🏥 *THE MEDICATION EXPERTS — NEW ORDER*\n`;
+  msg += `📅 ${dateStr} | ⏰ ${timeStr}\n━━━━━━━━━━━━━━━━\n\n`;
+
+  msg += `👤 *CUSTOMER*\n`;
+  if (name) msg += `Name: ${name}\n`;
+  if (phone) msg += `Phone: ${phone}\n`;
+  if (age) msg += `Age: ${age} yrs\n`;
+  msg += `Delivery: ${locationChoice === 'kano' ? 'Within Kano City' : 'OUTSIDE KANO ⚠️'}\n`;
+  if (address) msg += `Address: ${address}\n`;
+
+  msg += `\n💊 *MEDICINES*\n`;
+  let anyMed = false;
+  for (let i = 1; i <= medicineCount; i++) {
+    const nameEl = document.getElementById('medName' + i);
+    if (!nameEl) continue;
+    const mn = nameEl.value.trim();
+    if (!mn) continue;
+    anyMed = true;
+    const mf = document.getElementById('medForm' + i)?.value || '';
+    const ms = document.getElementById('medStrength' + i)?.value.trim() || '';
+    const mq = document.getElementById('medQty' + i)?.value.trim() || '';
+    const mfw = document.getElementById('medFor' + i)?.value.trim() || '';
+    msg += `[${i}] ${mn}`;
+    if (mf) msg += ` | ${mf}`;
+    if (ms) msg += ` | ${ms}`;
+    if (mq) msg += ` | Qty: ${mq}`;
+    if (mfw) msg += ` | For: ${mfw}`;
+    msg += '\n';
+  }
+  if (!anyMed) msg += `(Will be provided in chat)\n`;
+
+  let hasPrescriptions = Object.values(prescriptionData).some(Boolean);
+  let hasVoice = audioBlob !== null;
+
+  if (hasPrescriptions) {
+    let prescCount = Object.values(prescriptionData).filter(Boolean).length;
+    msg += `\n📷 *PRESCRIPTIONS:* ${prescCount} image(s)\n`;
+    msg += `⚠️ Customer has prescription images saved — please request them in this chat.\n`;
+    for (let i = 1; i <= prescriptionCount; i++) {
+      const noteEl = document.getElementById('prescNote' + i);
+      if (noteEl?.value.trim()) msg += `  • Presc ${i}: ${noteEl.value.trim()}\n`;
+    }
+  }
+
+  if (hasVoice) {
+    msg += `\n🎤 *VOICE NOTE:* Customer has recorded a voice note — please request it in this chat.\n`;
+  }
+
+  const refName = document.getElementById('refName')?.value.trim();
+  if (refName) {
+    const refTitle = document.getElementById('refTitle')?.value || '';
+    const refPhone = document.getElementById('refPhone')?.value.trim() || '';
+    const refWork = document.getElementById('refWorkplace')?.value.trim() || '';
+    const refAddr = document.getElementById('refAddress')?.value.trim() || '';
+    const refPatient = document.getElementById('refPatient')?.value.trim() || '';
+    msg += `\n🩺 *REFERRED BY*\nName: ${refName}`;
+    if (refTitle) msg += ` (${refTitle})`;
+    if (refPhone) msg += `\nPhone: ${refPhone}`;
+    if (refWork) msg += `\nWorkplace: ${refWork}`;
+    if (refAddr) msg += `\nAddress: ${refAddr}`;
+    if (refPatient) msg += `\nPatient: ${refPatient}`;
+    msg += '\n';
+  }
+
+  if (extra) msg += `\n💬 *Extra:* ${extra}\n`;
+  const proofAmount = document.getElementById("proofAmount")?.value.trim(); if (proofAmount) msg += `\n💳 *Amount Paid:* ${proofAmount}\n`; if (proofImageData) msg += `\n📸 *Proof of payment image is saved on customer phone — ask them to send it here.*\n`;
+
+  msg += `\n━━━━━━━━━━━━━━━━\n_Sent via The Medication Experts App_`;
+
+  window.open(`https://wa.me/2347034783425?text=${encodeURIComponent(msg)}`, '_blank');
+
+  // Show prescription reminder if needed
+  if (hasPrescriptions || hasVoice) {
+    document.getElementById('prescReminder').style.display = 'block';
+  }
+
+  if (locationChoice === 'outside') {
+    document.querySelector('.success-pay div:first-child').textContent = 'Outside Kano order received. We will contact you to arrange delivery.';
+  }
+
+  document.getElementById('successScreen').classList.add('show');
+  window.scrollTo(0, 0);
+}
+
+function openWhatsAppForImages() {
+  const msg = "📎 I am sending my prescription / proof of payment image now.\nIna aika hoton takardar magani / shaidar biya yanzu.";
+  window.open("https://wa.me/2347034783425?text=" + encodeURIComponent(msg), "_blank");
+}
+
+function resetForm() {
+  document.getElementById('successScreen').classList.remove('show');
+  document.getElementById('orderForm').reset();
+  document.getElementById('medicinesList').innerHTML = '';
+  document.getElementById('prescriptionsList').innerHTML = '';
+  medicineCount = 0; prescriptionCount = 0;
+  prescriptionData = {}; proofImageData = null;
+  audioBlob = null; audioChunks = [];
+  document.getElementById('proofPreview').style.display = 'none'; const pa = document.getElementById('proofAmount'); if(pa) pa.value = '';
+  document.getElementById('voicePlayback').style.display = 'none';
+  document.getElementById('voiceDownload').classList.remove('show');
+  document.getElementById('recordBtn').className = 'record-btn idle';
+  document.getElementById('recordBtnText').textContent = 'Press to Record / Danna don Yin Rikodin';
+  document.getElementById('prescReminder').style.display = 'none';
+  locationChoice = 'kano'; setLocation('kano');
+  addMedicine(); addPrescription();
+  window.scrollTo(0, 0);
+}
+
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault(); deferredPrompt = e;
+  document.getElementById('installBanner').classList.add('show');
+});
+document.getElementById('installBtn').addEventListener('click', async () => {
+  if (deferredPrompt) { deferredPrompt.prompt(); deferredPrompt = null; document.getElementById('installBanner').classList.remove('show'); }
+});
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    const sw = `self.addEventListener('install',e=>self.skipWaiting());self.addEventListener('activate',e=>e.waitUntil(clients.claim()));self.addEventListener('fetch',e=>e.respondWith(fetch(e.request).catch(()=>new Response('Offline'))));`;
+    navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'})));
+  });
+}
+</script>
+</body>
+</html>
