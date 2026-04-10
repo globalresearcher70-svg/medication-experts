@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin — The Medication Experts</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --green:#1a5c38;--green-mid:#2d8653;--green-light:#4CAF50;
+  --blue:#1a3a5c;--blue-mid:#1565C0;--gold:#f0a500;
+  --red:#c62828;--orange:#e65100;--off:#f7faf8;
+  --shadow:0 4px 24px rgba(26,92,56,0.13);--radius:14px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Nunito',sans-serif;background:#f0f2f5;min-height:100vh;}
+
+/* LOGIN */
+.login-screen{display:flex;align-items:center;justify-content:center;min-height:100vh;background:linear-gradient(145deg,var(--green) 0%,var(--blue) 100%);padding:20px;}
+.login-card{background:white;border-radius:20px;padding:32px 28px;width:100%;max-width:400px;box-shadow:0 20px 60px rgba(0,0,0,0.3);}
+.login-logo{text-align:center;margin-bottom:24px;}
+.login-logo h1{font-family:'Playfair Display',serif;font-size:22px;color:var(--green);margin-top:10px;}
+.login-logo p{font-size:12px;color:#888;margin-top:4px;}
+.login-field{margin-bottom:16px;}
+.login-field label{display:block;font-size:12px;font-weight:800;color:var(--green);margin-bottom:6px;text-transform:uppercase;}
+.login-field input{width:100%;padding:12px 16px;border:2px solid #e0ece5;border-radius:10px;font-family:'Nunito',sans-serif;font-size:14px;outline:none;}
+.login-field input:focus{border-color:var(--green-mid);}
+.login-btn{width:100%;padding:14px;background:linear-gradient(135deg,var(--green),var(--green-mid));color:white;border:none;border-radius:12px;font-family:'Nunito',sans-serif;font-size:15px;font-weight:800;cursor:pointer;margin-top:8px;}
+.login-error{background:#ffebee;color:var(--red);border-radius:8px;padding:10px 14px;font-size:12px;margin-top:10px;display:none;}
+
+/* DASHBOARD */
+.dashboard{display:none;}
+.topbar{background:linear-gradient(135deg,var(--green),var(--blue));color:white;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10;}
+.topbar h1{font-family:'Playfair Display',serif;font-size:18px;}
+.topbar-actions{display:flex;gap:10px;align-items:center;}
+.logout-btn{background:rgba(255,255,255,0.2);color:white;border:none;border-radius:8px;padding:6px 14px;font-family:'Nunito',sans-serif;font-weight:800;font-size:12px;cursor:pointer;}
+
+/* STATS */
+.stats-row{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;padding:16px;}
+.stat-card{background:white;border-radius:var(--radius);padding:16px;text-align:center;box-shadow:var(--shadow);}
+.stat-card .stat-num{font-size:28px;font-weight:900;margin-bottom:4px;}
+.stat-card .stat-label{font-size:11px;color:#888;font-weight:700;text-transform:uppercase;}
+.stat-card.pending .stat-num{color:var(--orange);}
+.stat-card.processing .stat-num{color:var(--blue-mid);}
+.stat-card.delivered .stat-num{color:var(--green);}
+.stat-card.total .stat-num{color:var(--green);}
+
+/* TABS */
+.tabs{display:flex;background:white;border-bottom:2px solid #eee;overflow-x:auto;position:sticky;top:56px;z-index:9;}
+.tab{flex:1;min-width:80px;padding:12px 8px;text-align:center;font-size:12px;font-weight:800;color:#888;cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap;}
+.tab.active{color:var(--green);border-bottom-color:var(--green);}
+
+.tab-content{display:none;padding:16px;}
+.tab-content.active{display:block;}
+
+/* ORDERS */
+.order-card{background:white;border-radius:var(--radius);padding:16px;margin-bottom:12px;box-shadow:var(--shadow);border-left:4px solid #ddd;}
+.order-card.pending{border-left-color:var(--orange);}
+.order-card.processing{border-left-color:var(--blue-mid);}
+.order-card.delivered{border-left-color:var(--green-light);}
+.order-card.cancelled{border-left-color:var(--red);}
+.order-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;}
+.order-id{font-size:10px;color:#aaa;font-weight:700;}
+.order-status{font-size:10px;font-weight:800;padding:3px 10px;border-radius:10px;text-transform:uppercase;}
+.order-status.pending{background:#fff3e0;color:var(--orange);}
+.order-status.processing{background:#e3f2fd;color:var(--blue-mid);}
+.order-status.delivered{background:#e8f5e9;color:var(--green);}
+.order-status.cancelled{background:#ffebee;color:var(--red);}
+.order-customer{font-size:15px;font-weight:800;color:var(--green);margin-bottom:2px;}
+.order-phone{font-size:13px;color:var(--blue-mid);font-weight:700;margin-bottom:6px;}
+.order-detail{font-size:12px;color:#666;margin-bottom:3px;line-height:1.5;}
+.order-detail strong{color:var(--green);}
+.order-actions{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;}
+.action-btn{padding:8px 12px;border:none;border-radius:8px;font-family:'Nunito',sans-serif;font-size:11px;font-weight:800;cursor:pointer;}
+.btn-pending{background:#fff3e0;color:var(--orange);}
+.btn-processing{background:#e3f2fd;color:var(--blue-mid);}
+.btn-delivered{background:#e8f5e9;color:var(--green);}
+.btn-cancelled{background:#ffebee;color:var(--red);}
+.btn-view-presc{background:var(--blue-mid);color:white;}
+.btn-play-voice{background:#880e4f;color:white;}
+.btn-chat{background:var(--green);color:white;}
+.btn-wa{background:#25D366;color:white;}
+
+/* PRESCRIPTION MODAL */
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:100;align-items:center;justify-content:center;padding:20px;}
+.modal.show{display:flex;}
+.modal-content{background:white;border-radius:16px;padding:20px;max-width:500px;width:100%;max-height:80vh;overflow-y:auto;}
+.modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;}
+.modal-title{font-size:15px;font-weight:800;color:var(--green);}
+.modal-close{background:#f0f0f0;border:none;border-radius:8px;padding:6px 12px;cursor:pointer;font-weight:800;}
+.modal-img{width:100%;border-radius:10px;margin-bottom:10px;}
+.modal-audio{width:100%;margin-bottom:10px;}
+
+/* CHAT PANEL */
+.chat-list{margin-bottom:12px;}
+.chat-item{background:white;border-radius:var(--radius);padding:14px;margin-bottom:10px;box-shadow:var(--shadow);cursor:pointer;border-left:4px solid var(--green-mid);}
+.chat-item:hover{background:#f0f7f3;}
+.chat-customer{font-size:14px;font-weight:800;color:var(--green);}
+.chat-preview{font-size:12px;color:#888;margin-top:3px;}
+.chat-time{font-size:10px;color:#aaa;margin-top:4px;}
+.chat-unread{background:var(--red);color:white;border-radius:50%;width:18px;height:18px;font-size:10px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;margin-left:6px;}
+
+.admin-chat{background:white;border-radius:var(--radius);box-shadow:var(--shadow);display:flex;flex-direction:column;height:500px;}
+.admin-chat-header{padding:14px 16px;background:var(--green);color:white;border-radius:var(--radius) var(--radius) 0 0;display:flex;justify-content:space-between;align-items:center;}
+.admin-chat-header h3{font-size:14px;font-weight:800;}
+.back-btn{background:rgba(255,255,255,0.2);border:none;color:white;padding:5px 10px;border-radius:6px;font-family:'Nunito',sans-serif;font-weight:800;font-size:11px;cursor:pointer;}
+.admin-messages{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:8px;}
+.admin-msg{max-width:80%;padding:10px 14px;border-radius:12px;font-size:13px;line-height:1.5;}
+.admin-msg.customer{background:#f0f7f3;border:1px solid #c8e6c9;align-self:flex-start;}
+.admin-msg.staff{background:var(--green);color:white;align-self:flex-end;}
+.admin-msg .msg-time{font-size:10px;opacity:0.6;margin-top:4px;}
+.admin-input-row{display:flex;gap:8px;padding:12px 14px;border-top:1px solid #eee;}
+.admin-input{flex:1;padding:10px 14px;border:2px solid #e0ece5;border-radius:10px;font-family:'Nunito',sans-serif;font-size:13px;outline:none;}
+.admin-input:focus{border-color:var(--green-mid);}
+.admin-send{background:var(--green);color:white;border:none;border-radius:10px;padding:10px 16px;font-family:'Nunito',sans-serif;font-weight:800;cursor:pointer;}
+
+/* FEATURED MEDICINES MANAGEMENT */
+.featured-form{background:white;border-radius:var(--radius);padding:18px;box-shadow:var(--shadow);margin-bottom:16px;}
+.featured-form h3{font-size:14px;font-weight:800;color:var(--green);margin-bottom:14px;}
+.f-field{margin-bottom:12px;}
+.f-field label{display:block;font-size:11px;font-weight:800;color:#555;margin-bottom:4px;text-transform:uppercase;}
+.f-field input,.f-field select,.f-field textarea{width:100%;padding:10px 14px;border:2px solid #e0ece5;border-radius:8px;font-family:'Nunito',sans-serif;font-size:13px;outline:none;}
+.f-field input:focus,.f-field textarea:focus{border-color:var(--green-mid);}
+.add-featured-btn{width:100%;padding:13px;background:var(--green);color:white;border:none;border-radius:10px;font-family:'Nunito',sans-serif;font-weight:800;font-size:14px;cursor:pointer;}
+.featured-item{background:white;border-radius:10px;padding:14px;box-shadow:var(--shadow);margin-bottom:10px;display:flex;gap:12px;align-items:center;}
+.featured-item .f-icon{font-size:28px;}
+.featured-item .f-info{flex:1;}
+.featured-item .f-name{font-size:14px;font-weight:800;color:var(--green);}
+.featured-item .f-desc{font-size:11px;color:#888;margin-top:2px;}
+.delete-featured{background:#ffebee;color:var(--red);border:none;border-radius:6px;padding:6px 10px;font-size:11px;font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif;}
+
+/* STAFF */
+.staff-form{background:white;border-radius:var(--radius);padding:18px;box-shadow:var(--shadow);margin-bottom:16px;}
+.staff-item{background:white;border-radius:10px;padding:14px;box-shadow:var(--shadow);margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;}
+.staff-name{font-size:14px;font-weight:800;color:var(--green);}
+.staff-role{font-size:11px;color:#888;}
+.remove-staff{background:#ffebee;color:var(--red);border:none;border-radius:6px;padding:6px 10px;font-size:11px;font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif;}
+
+/* FILTER */
+.filter-row{display:flex;gap:8px;margin-bottom:14px;overflow-x:auto;}
+.filter-btn{padding:7px 14px;border:2px solid #e0ece5;border-radius:20px;background:white;font-family:'Nunito',sans-serif;font-size:11px;font-weight:800;cursor:pointer;white-space:nowrap;color:#555;}
+.filter-btn.active{border-color:var(--green);background:var(--green);color:white;}
+
+.empty-state{text-align:center;padding:40px 20px;color:#aaa;}
+.empty-state .empty-icon{font-size:48px;margin-bottom:12px;}
+.empty-state p{font-size:14px;}
+
+.loading-spinner{display:flex;align-items:center;justify-content:center;padding:40px;}
+.spinner{width:36px;height:36px;border:3px solid #e0ece5;border-top-color:var(--green);border-radius:50%;animation:spin 0.8s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div class="login-screen" id="loginScreen">
+  <div class="login-card">
+    <div class="login-logo">
+      <div style="font-size:36px;">🏥</div>
+      <h1>The Medication Experts</h1>
+      <p>Admin Dashboard — Secure Login</p>
+    </div>
+    <div class="login-field">
+      <label>Username</label>
+      <input type="text" id="loginUser" placeholder="Enter username">
+    </div>
+    <div class="login-field">
+      <label>Password</label>
+      <input type="password" id="loginPass" placeholder="Enter password" onkeypress="if(event.key==='Enter')doLogin()">
+    </div>
+    <button class="login-btn" onclick="doLogin()">Login to Dashboard</button>
+    <div class="login-error" id="loginError">❌ Incorrect username or password. Please try again.</div>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div class="dashboard" id="dashboard">
+  <div class="topbar">
+    <div>
+      <h1>🏥 Medication Experts</h1>
+      <div style="font-size:11px;opacity:0.7;">Admin Dashboard</div>
+    </div>
+    <div class="topbar-actions">
+      <span id="adminName" style="font-size:12px;font-weight:700;"></span>
+      <button class="logout-btn" onclick="doLogout()">Logout</button>
+    </div>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats-row">
+    <div class="stat-card total"><div class="stat-num" id="statTotal">0</div><div class="stat-label">Total Orders</div></div>
+    <div class="stat-card pending"><div class="stat-num" id="statPending">0</div><div class="stat-label">Pending</div></div>
+    <div class="stat-card processing"><div class="stat-num" id="statProcessing">0</div><div class="stat-label">Processing</div></div>
+    <div class="stat-card delivered"><div class="stat-num" id="statDelivered">0</div><div class="stat-label">Delivered</div></div>
+  </div>
+
+  <!-- TABS -->
+  <div class="tabs">
+    <div class="tab active" onclick="switchTab('orders')">📋 Orders</div>
+    <div class="tab" onclick="switchTab('chats')">💬 Chats</div>
+    <div class="tab" onclick="switchTab('featured')">⭐ Featured</div>
+    <div class="tab" onclick="switchTab('staff')">👥 Staff</div>
+  </div>
+
+  <!-- ORDERS TAB -->
+  <div class="tab-content active" id="tab-orders">
+    <div class="filter-row">
+      <button class="filter-btn active" onclick="filterOrders('all', this)">All</button>
+      <button class="filter-btn" onclick="filterOrders('pending', this)">Pending</button>
+      <button class="filter-btn" onclick="filterOrders('processing', this)">Processing</button>
+      <button class="filter-btn" onclick="filterOrders('delivered', this)">Delivered</button>
+      <button class="filter-btn" onclick="filterOrders('cancelled', this)">Cancelled</button>
+    </div>
+    <div id="ordersLoading" class="loading-spinner"><div class="spinner"></div></div>
+    <div id="ordersList"></div>
+  </div>
+
+  <!-- CHATS TAB -->
+  <div class="tab-content" id="tab-chats">
+    <div id="chatListView">
+      <div id="chatsLoading" class="loading-spinner"><div class="spinner"></div></div>
+      <div id="chatList"></div>
+    </div>
+    <div id="chatDetailView" style="display:none;">
+      <div class="admin-chat" id="adminChat">
+        <div class="admin-chat-header">
+          <h3 id="chatDetailName">Chat</h3>
+          <button class="back-btn" onclick="backToChats()">← Back</button>
+        </div>
+        <div class="admin-messages" id="adminMessages"></div>
+        <div class="admin-input-row">
+          <input type="text" class="admin-input" id="adminInput" placeholder="Type reply..." onkeypress="if(event.key==='Enter')sendAdminMessage()">
+          <button class="admin-send" onclick="sendAdminMessage()">Send</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FEATURED TAB -->
+  <div class="tab-content" id="tab-featured">
+    <div class="featured-form">
+      <h3>➕ Add Featured Medicine</h3>
+      <div class="f-field"><label>Medicine Name</label><input type="text" id="fName" placeholder="e.g. Paracetamol 500mg"></div>
+      <div class="f-field"><label>Description</label><textarea id="fDesc" rows="2" placeholder="Short description..."></textarea></div>
+      <div class="f-field"><label>Icon (Emoji)</label><input type="text" id="fIcon" placeholder="e.g. 💊 🌡️ 💉" value="💊"></div>
+      <div class="f-field"><label>Badge (optional)</label><input type="text" id="fBadge" placeholder="e.g. Popular, New, Sale"></div>
+      <div class="f-field"><label>Display Order</label><input type="number" id="fOrder" value="1" min="1"></div>
+      <button class="add-featured-btn" onclick="addFeaturedMedicine()">Add to Carousel</button>
+    </div>
+    <h3 style="font-size:14px;font-weight:800;color:var(--green);margin-bottom:12px;">Current Featured Medicines</h3>
+    <div id="featuredList"></div>
+  </div>
+
+  <!-- STAFF TAB -->
+  <div class="tab-content" id="tab-staff">
+    <div class="staff-form">
+      <h3 style="font-size:14px;font-weight:800;color:var(--green);margin-bottom:14px;">➕ Add Staff Member</h3>
+      <div class="f-field"><label>Full Name</label><input type="text" id="staffName" placeholder="e.g. Ibrahim Musa"></div>
+      <div class="f-field"><label>Role</label>
+        <select id="staffRole">
+          <option>Delivery Staff</option><option>Order Manager</option>
+          <option>Customer Support</option><option>Pharmacist</option><option>Manager</option>
+        </select>
+      </div>
+      <div class="f-field"><label>Username</label><input type="text" id="staffUsername" placeholder="e.g. ibrahim01"></div>
+      <div class="f-field"><label>Password</label><input type="password" id="staffPassword" placeholder="Set a password"></div>
+      <button class="add-featured-btn" onclick="addStaff()">Add Staff Member</button>
+    </div>
+    <h3 style="font-size:14px;font-weight:800;color:var(--green);margin-bottom:12px;">Current Staff</h3>
+    <div id="staffList"></div>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal" id="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="modal-title" id="modalTitle">View Files</div>
+      <button class="modal-close" onclick="closeModal()">✕ Close</button>
+    </div>
+    <div id="modalBody"></div>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
+import { getFirestore, collection, onSnapshot, query, orderBy, doc, updateDoc, addDoc, deleteDoc, serverTimestamp, getDoc } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBp5UsfnrG_3cuAIYqnSg3n_xxuBpmkST4",
+  authDomain: "medication-experts.firebaseapp.com",
+  projectId: "medication-experts",
+  storageBucket: "medication-experts.firebasestorage.app",
+  messagingSenderId: "911571614962",
+  appId: "1:911571614962:web:4a9ffc308508dda979e46b",
+  measurementId: "G-WQHSDH1W7V"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+// ACCOUNTS
+const ACCOUNTS = {
+  'masud': { password: 'elmasglobalventures112005*#+(1221)', name: "Mas'ud Ibrahim Garba", role: 'owner' }
+};
+
+let allOrders = [];
+let currentFilter = 'all';
+let currentChatId = null;
+let unsubscribeMessages = null;
+let staffAccounts = {};
+
+// LOGIN
+window.doLogin = function() {
+  const user = document.getElementById('loginUser').value.trim().toLowerCase();
+  const pass = document.getElementById('loginPass').value;
+  const allAccounts = { ...ACCOUNTS, ...staffAccounts };
+  if (allAccounts[user] && allAccounts[user].password === pass) {
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('dashboard').style.display = 'block';
+    document.getElementById('adminName').textContent = allAccounts[user].name;
+    initDashboard();
+  } else {
+    document.getElementById('loginError').style.display = 'block';
+  }
+};
+
+window.doLogout = function() {
+  document.getElementById('loginScreen').style.display = 'flex';
+  document.getElementById('dashboard').style.display = 'none';
+  document.getElementById('loginUser').value = '';
+  document.getElementById('loginPass').value = '';
+};
+
+function initDashboard() {
+  loadOrders();
+  loadChats();
+  loadFeaturedMedicines();
+  loadStaff();
+}
+
+// ORDERS
+function loadOrders() {
+  const q = query(collection(db, 'orders'), orderBy('timestamp', 'desc'));
+  onSnapshot(q, (snap) => {
+    allOrders = [];
+    snap.forEach(d => allOrders.push({id: d.id, ...d.data()}));
+    updateStats();
+    renderOrders(currentFilter);
+    document.getElementById('ordersLoading').style.display = 'none';
+  });
+}
+
+function updateStats() {
+  document.getElementById('statTotal').textContent = allOrders.length;
+  document.getElementById('statPending').textContent = allOrders.filter(o=>o.status==='pending').length;
+  document.getElementById('statProcessing').textContent = allOrders.filter(o=>o.status==='processing').length;
+  document.getElementById('statDelivered').textContent = allOrders.filter(o=>o.status==='delivered').length;
+}
+
+window.filterOrders = function(filter, btn) {
+  currentFilter = filter;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderOrders(filter);
+};
+
+function renderOrders(filter) {
+  const list = document.getElementById('ordersList');
+  const filtered = filter === 'all' ? allOrders : allOrders.filter(o => o.status === filter);
+  if (!filtered.length) {
+    list.innerHTML = `<div class="empty-state"><div class="empty-icon">📋</div><p>No ${filter === 'all' ? '' : filter} orders yet.</p></div>`;
+    return;
+  }
+  list.innerHTML = filtered.map(order => `
+    <div class="order-card ${order.status}">
+      <div class="order-header">
+        <div class="order-id">ID: ${order.id.slice(0,8)}... · ${order.date || ''} ${order.time || ''}</div>
+        <span class="order-status ${order.status}">${order.status}</span>
+      </div>
+      <div class="order-customer">${order.customer?.name || 'Unknown'}</div>
+      <div class="order-phone">📞 ${order.customer?.phone || 'No phone'}</div>
+      <div class="order-detail">📍 <strong>Location:</strong> ${order.customer?.location === 'kano' ? 'Within Kano City' : '⚠️ Outside Kano'}</div>
+      <div class="order-detail">🏠 <strong>Address:</strong> ${order.customer?.address || 'Not provided'}</div>
+      ${order.medicines?.length ? `<div class="order-detail">💊 <strong>Medicines:</strong> ${order.medicines.map(m=>`${m.name}${m.strength?' ('+m.strength+')':''} x${m.quantity||'?'}`).join(', ')}</div>` : ''}
+      ${order.extraMessage ? `<div class="order-detail">💬 <strong>Note:</strong> ${order.extraMessage}</div>` : ''}
+      ${order.paymentAmount ? `<div class="order-detail">💳 <strong>Amount Paid:</strong> ${order.paymentAmount}</div>` : ''}
+      ${order.referrer?.name ? `<div class="order-detail">🩺 <strong>Referred by:</strong> ${order.referrer.name} (${order.referrer.title})</div>` : ''}
+      <div class="order-actions">
+        <button class="action-btn btn-pending" onclick="updateStatus('${order.id}','pending')">⏳ Pending</button>
+        <button class="action-btn btn-processing" onclick="updateStatus('${order.id}','processing')">🔄 Processing</button>
+        <button class="action-btn btn-delivered" onclick="updateStatus('${order.id}','delivered')">✅ Delivered</button>
+        <button class="action-btn btn-cancelled" onclick="updateStatus('${order.id}','cancelled')">❌ Cancel</button>
+        ${order.prescriptions?.length ? `<button class="action-btn btn-view-presc" onclick="viewPrescriptions('${order.id}')">📷 Prescriptions (${order.prescriptions.length})</button>` : ''}
+        ${order.voiceNoteURL ? `<button class="action-btn btn-play-voice" onclick="playVoice('${order.voiceNoteURL}')">🎤 Voice Note</button>` : ''}
+        ${order.paymentProofURL ? `<button class="action-btn btn-view-presc" onclick="viewPaymentProof('${order.paymentProofURL}')">💳 Payment Proof</button>` : ''}
+        ${order.customer?.phone ? `<button class="action-btn btn-wa" onclick="waContact('${order.customer.phone}','${order.id}')">📱 WhatsApp</button>` : ''}
+        ${order.chatId ? `<button class="action-btn btn-chat" onclick="openChatDetail('${order.chatId}','${order.customer?.name||'Customer'}')">💬 Chat</button>` : ''}
+      </div>
+    </div>
+  `).join('');
+}
+
+window.updateStatus = async function(orderId, status) {
+  await updateDoc(doc(db, 'orders', orderId), {status});
+};
+
+window.viewPrescriptions = function(orderId) {
+  const order = allOrders.find(o => o.id === orderId);
+  if (!order?.prescriptions?.length) return;
+  document.getElementById('modalTitle').textContent = `Prescriptions (${order.prescriptions.length})`;
+  document.getElementById('modalBody').innerHTML = order.prescriptions.map((p,i) => `
+    <p style="font-size:12px;color:#888;margin-bottom:4px;">Prescription ${i+1}${p.note?' — '+p.note:''}</p>
+    <img src="${p.url}" class="modal-img" onclick="window.open('${p.url}','_blank')">
+  `).join('<hr style="margin:12px 0;">');
+  document.getElementById('modal').classList.add('show');
+};
+
+window.viewPaymentProof = function(url) {
+  document.getElementById('modalTitle').textContent = 'Payment Proof';
+  document.getElementById('modalBody').innerHTML = `<img src="${url}" class="modal-img" onclick="window.open('${url}','_blank')">`;
+  document.getElementById('modal').classList.add('show');
+};
+
+window.playVoice = function(url) {
+  document.getElementById('modalTitle').textContent = 'Voice Note';
+  document.getElementById('modalBody').innerHTML = `<audio controls class="modal-audio" src="${url}"></audio><p style="font-size:12px;color:#888;margin-top:8px;">Tap play to listen to the customer's voice note.</p>`;
+  document.getElementById('modal').classList.add('show');
+};
+
+window.waContact = function(phone, orderId) {
+  const msg = `Hello! This is The Medication Experts regarding your order ${orderId.slice(0,8)}. `;
+  window.open(`https://wa.me/234${phone.replace(/^0/,'')}?text=${encodeURIComponent(msg)}`, '_blank');
+};
+
+window.closeModal = function() { document.getElementById('modal').classList.remove('show'); };
+
+// TABS
+window.switchTab = function(tab) {
+  document.querySelectorAll('.tab').forEach((t,i) => t.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  const tabs = ['orders','chats','featured','staff'];
+  const idx = tabs.indexOf(tab);
+  document.querySelectorAll('.tab')[idx].classList.add('active');
+  document.getElementById('tab-'+tab).classList.add('active');
+};
+
+// CHATS
+function loadChats() {
+  const q = query(collection(db, 'chats'), orderBy('startedAt', 'desc'));
+  onSnapshot(q, (snap) => {
+    const chats = [];
+    snap.forEach(d => chats.push({id: d.id, ...d.data()}));
+    document.getElementById('chatsLoading').style.display = 'none';
+    renderChatList(chats);
+  });
+}
+
+function renderChatList(chats) {
+  const list = document.getElementById('chatList');
+  if (!chats.length) {
+    list.innerHTML = `<div class="empty-state"><div class="empty-icon">💬</div><p>No customer chats yet.</p></div>`;
+    return;
+  }
+  list.innerHTML = chats.map(c => `
+    <div class="chat-item" onclick="openChatDetail('${c.id}','${c.customerName||'Customer'}')">
+      <div class="chat-customer">${c.customerName || 'Customer'} ${c.status==='open'?'<span class="chat-unread">●</span>':''}</div>
+      <div class="chat-preview">${c.lastMessage || 'No messages yet'}</div>
+      <div class="chat-time">${c.orderId ? 'Order: '+c.orderId.slice(0,8)+'...' : ''}</div>
+    </div>
+  `).join('');
+}
+
+window.openChatDetail = function(chatId, customerName) {
+  currentChatId = chatId;
+  document.getElementById('chatListView').style.display = 'none';
+  document.getElementById('chatDetailView').style.display = 'block';
+  document.getElementById('chatDetailName').textContent = '💬 ' + customerName;
+  document.getElementById('adminMessages').innerHTML = '';
+  if (unsubscribeMessages) unsubscribeMessages();
+  const q = query(collection(db, 'chats', chatId, 'messages'), orderBy('timestamp', 'asc'));
+  unsubscribeMessages = onSnapshot(q, (snap) => {
+    const container = document.getElementById('adminMessages');
+    container.innerHTML = '';
+    snap.forEach(d => {
+      const data = d.data();
+      const div = document.createElement('div');
+      div.className = `admin-msg ${data.sender === 'customer' ? 'customer' : 'staff'}`;
+      div.innerHTML = `${data.text}<div class="msg-time">${data.senderName||data.sender}</div>`;
+      container.appendChild(div);
+    });
+    container.scrollTop = container.scrollHeight;
+  });
+};
+
+window.backToChats = function() {
+  document.getElementById('chatListView').style.display = 'block';
+  document.getElementById('chatDetailView').style.display = 'none';
+  if (unsubscribeMessages) { unsubscribeMessages(); unsubscribeMessages = null; }
+  currentChatId = null;
+};
+
+window.sendAdminMessage = async function() {
+  const input = document.getElementById('adminInput');
+  const text = input.value.trim();
+  if (!text || !currentChatId) return;
+  input.value = '';
+  await addDoc(collection(db, 'chats', currentChatId, 'messages'), {
+    text, sender: 'staff', senderName: 'The Medication Experts', timestamp: serverTimestamp()
+  });
+  await updateDoc(doc(db, 'chats', currentChatId), {lastMessage: text, lastMessageTime: serverTimestamp()});
+};
+
+// FEATURED MEDICINES
+function loadFeaturedMedicines() {
+  const q = query(collection(db, 'featured_medicines'), orderBy('order', 'asc'));
+  onSnapshot(q, (snap) => {
+    const items = [];
+    snap.forEach(d => items.push({id: d.id, ...d.data()}));
+    renderFeaturedList(items);
+  });
+}
+
+function renderFeaturedList(items) {
+  const list = document.getElementById('featuredList');
+  if (!items.length) {
+    list.innerHTML = `<div class="empty-state"><div class="empty-icon">⭐</div><p>No featured medicines yet. Add one above.</p></div>`;
+    return;
+  }
+  list.innerHTML = items.map(item => `
+    <div class="featured-item">
+      <div class="f-icon">${item.icon || '💊'}</div>
+      <div class="f-info">
+        <div class="f-name">${item.name}${item.badge?' <span style="background:var(--gold);color:white;font-size:9px;padding:2px 6px;border-radius:6px;">'+item.badge+'</span>':''}</div>
+        <div class="f-desc">${item.description || ''}</div>
+      </div>
+      <button class="delete-featured" onclick="deleteFeatured('${item.id}')">✕ Remove</button>
+    </div>
+  `).join('');
+}
+
+window.addFeaturedMedicine = async function() {
+  const name = document.getElementById('fName').value.trim();
+  if (!name) { alert('Please enter a medicine name'); return; }
+  await addDoc(collection(db, 'featured_medicines'), {
+    name,
+    description: document.getElementById('fDesc').value.trim(),
+    icon: document.getElementById('fIcon').value.trim() || '💊',
+    badge: document.getElementById('fBadge').value.trim(),
+    order: parseInt(document.getElementById('fOrder').value) || 1,
+    addedAt: serverTimestamp()
+  });
+  document.getElementById('fName').value = '';
+  document.getElementById('fDesc').value = '';
+  document.getElementById('fIcon').value = '💊';
+  document.getElementById('fBadge').value = '';
+  alert('✅ Medicine added to carousel!');
+};
+
+window.deleteFeatured = async function(id) {
+  if (confirm('Remove this medicine from the carousel?')) {
+    await deleteDoc(doc(db, 'featured_medicines', id));
+  }
+};
+
+// STAFF
+function loadStaff() {
+  onSnapshot(collection(db, 'staff'), (snap) => {
+    staffAccounts = {};
+    const items = [];
+    snap.forEach(d => {
+      const data = d.data();
+      staffAccounts[data.username] = {password: data.password, name: data.name, role: data.role};
+      items.push({id: d.id, ...data});
+    });
+    renderStaffList(items);
+  });
+}
+
+function renderStaffList(items) {
+  const list = document.getElementById('staffList');
+  if (!items.length) {
+    list.innerHTML = `<div class="empty-state"><div class="empty-icon">👥</div><p>No staff added yet.</p></div>`;
+    return;
+  }
+  list.innerHTML = items.map(s => `
+    <div class="staff-item">
+      <div>
+        <div class="staff-name">${s.name}</div>
+        <div class="staff-role">${s.role} · @${s.username}</div>
+      </div>
+      <button class="remove-staff" onclick="removeStaff('${s.id}')">✕ Remove</button>
+    </div>
+  `).join('');
+}
+
+window.addStaff = async function() {
+  const name = document.getElementById('staffName').value.trim();
+  const username = document.getElementById('staffUsername').value.trim().toLowerCase();
+  const password = document.getElementById('staffPassword').value;
+  const role = document.getElementById('staffRole').value;
+  if (!name || !username || !password) { alert('Please fill all staff fields'); return; }
+  await addDoc(collection(db, 'staff'), {name, username, password, role, addedAt: serverTimestamp()});
+  document.getElementById('staffName').value = '';
+  document.getElementById('staffUsername').value = '';
+  document.getElementById('staffPassword').value = '';
+  alert(`✅ Staff member ${name} added! They can login with username: ${username}`);
+};
+
+window.removeStaff = async function(id) {
+  if (confirm('Remove this staff member?')) await deleteDoc(doc(db, 'staff', id));
+};
+</script>
+</body>
+</html>
